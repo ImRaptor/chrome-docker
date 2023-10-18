@@ -21,10 +21,19 @@ RUN apt-get install -y wget
 # Install wmctrl.
 RUN apt-get install -y wmctrl
 
-COPY *.deb /
-RUN apt-get -y install ./chrome64_60.0.3112.90.deb
+# Install libcurl3
+RUN apt-get install -y libcurl3
+
+# Install dos2unix
+RUN apt-get install -y dos2unix
+
+ARG PACKAGE_NAME
+
+COPY ${PACKAGE_NAME} /
+RUN apt-get -y install ./${PACKAGE_NAME}
 
 COPY bootstrap.sh /
 RUN chmod a+x ./bootstrap.sh
+RUN dos2unix ./bootstrap.sh
 
 CMD '/bootstrap.sh'
